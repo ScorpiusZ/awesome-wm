@@ -3,7 +3,6 @@ require("awful.autofocus")
 require("awful.rules")
 require("beautiful")
 require("naughty")
-require("volume")
 require("vicious")
 
 -- Load Debian menu entries
