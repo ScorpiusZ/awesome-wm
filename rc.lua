@@ -82,58 +82,50 @@ end
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
-    {"edit config",           "terminal -x vim /home/scorpius/.config/awesome/rc.lua"},
-    { "restart", awesome.restart },
-    {"reboot",                "sudo reboot"},
-    { "quit", "gnome-session-quit" }
+    {" Edit config", "terminal -x vim /home/scorpius/.config/awesome/rc.lua"},
+    {" Restart", awesome.restart },
+    {" Reboot",  "sudo reboot"},
+    {" Quit", "gnome-session-quit" }
 }
 
-mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Debian", debian.menu.Debian_menu.Debian },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+mydevmenu = {
+    {" Eclipse",              "/home/scorpius/Android/eclipse/eclipse", beautiful.eclipse_icon},
+    {" Vim",                   "vim", beautiful.emacs_icon},
+}
+
+mywebmenu = {
+    {" Chrome",               "google-chrome", beautiful.chromium_icon},
+    {" Firefox",              "firefox", beautiful.firefox_icon}
+}
+
+mymainmenu = awful.menu({ 
+    items = {
+        {" Awesome", myawesomemenu, beautiful.awesome_icon },
+        {" develop", mydevmenu, beautiful.mydevmenu_icon},
+        {" web",     mywebmenu, beautiful.mywebmenu_icon},
+        {" open terminal", terminal }
+    }
+})
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
-                                     menu = mymainmenu })
--- }}}
+menu = mymainmenu })
 
--- {{{ Wibox
--- Create a textclock widget
---mytextclock = awful.widget.textclock({ align = "right" })
+--{{---| Wibox |----------------------------------------------------------------------
 
--- Initialize widget
-datewidget = widget({ type = "textbox" })
--- Register widget
-vicious.register(datewidget, vicious.widgets.date, "%F  %a  %T ", 1)
 
--- Initialize widget
-memwidget = widget({ type = "textbox" })
--- -- Register widget
-vicious.register(memwidget, vicious.widgets.mem, "MEM :$1% TOTAL:$3MB   ", 10)
-
--- Initialize widget
-cpuwidget = widget({ type = "textbox" })
--- -- Register widget
-vicious.register(cpuwidget, vicious.widgets.cpu, "  CPU : $1%   ")
-
--- Create a systray
 mysystray = widget({ type = "systray" })
-
-
--- Create a wibox for each screen and add it
 mywibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
-                    awful.button({ }, 1, awful.tag.viewonly),
-                    awful.button({ modkey }, 1, awful.client.movetotag),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, awful.tag.viewnext),
-                    awful.button({ }, 5, awful.tag.viewprev)
-                    )
+                        awful.button({ }, 1, awful.tag.viewonly),
+                        awful.button({ modkey }, 1, awful.client.movetotag),
+                        awful.button({ }, 3, awful.tag.viewtoggle),
+                        awful.button({ modkey }, 3, awful.client.toggletag),
+                        awful.button({ }, 4, awful.tag.viewnext),
+                        awful.button({ }, 5, awful.tag.viewprev)
+)
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
@@ -143,8 +135,6 @@ mytasklist.buttons = awful.util.table.join(
                                                   if not c:isvisible() then
                                                       awful.tag.viewonly(c:tags()[1])
                                                   end
-                                                  -- This will also un-minimize
-                                                  -- the client, if needed
                                                   client.focus = c
                                                   c:raise()
                                               end
@@ -167,42 +157,106 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 for s = 1, screen.count() do
-    -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
-    -- Create an imagebox widget which will contains an icon indicating which layout we're using.
-    -- We need one layoutbox per screen.
     mylayoutbox[s] = awful.widget.layoutbox(s)
     mylayoutbox[s]:buttons(awful.util.table.join(
                            awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
-    -- Create a taglist widget
     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
-
-    -- Create a tasklist widget
     mytasklist[s] = awful.widget.tasklist(function(c)
                                               return awful.widget.tasklist.label.currenttags(c, s)
                                           end, mytasklist.buttons)
 
-    -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top",height= "20", screen = s })
-    -- Add widgets to the wibox - order matters
-    mywibox[s].widgets = {
-        {
-            mylauncher,
-            mytaglist[s],
-            mypromptbox[s],
-            layout = awful.widget.layout.horizontal.leftright
-        },
-        mylayoutbox[s],
-        datewidget,
-        memwidget,
-        cpuwidget,
-        s == 1 and mysystray or nil,
-        mytasklist[s],
-        layout = awful.widget.layout.horizontal.rightleft
-    }
+-- Time widget
+datewidget = widget({ type = "textbox" })
+-- Register widget
+vicious.register(datewidget, vicious.widgets.date, "%F  %a  %T ", 1)
+
+-- Mem widget
+memwidget = widget({ type = "textbox" })
+vicious.register(memwidget, vicious.widgets.mem, "Mem :$1% ", 10)
+
+-- Cpu widget
+cpuwidget = widget({ type = "textbox" })
+vicious.register(cpuwidget, vicious.widgets.cpu, "  Cpu : $1%   ")
+
+-- Net widget 
+netwidget = widget({ type = "textbox" })
+vicious.register(netwidget, 
+vicious.widgets.net,
+'<span background="#313131" font="Terminus 12"> <span font="Terminus 9" color="#7AC82E">${eth0 down_kb}</span> <span font="Terminus 9" color="#46A8C3">${eth0 up_kb}</span> </span>', 3)
+neticon = widget ({type = "imagebox" })
+neticon.image = image(beautiful.widget_net)
+netwidget:buttons(awful.util.table.join(awful.button({ }, 1,
+function () awful.util.spawn_with_shell(iptraf) end)))
+
+--{{---| Music widget |----------------------------------------------------------------------
+
+music = widget ({type = "imagebox" })
+music.image = image(beautiful.widget_music)
+music:buttons(awful.util.table.join(
+  awful.button({ }, 1, function () awful.util.spawn_with_shell(musicplr) end),
+  awful.button({ modkey }, 1, function () awful.util.spawn_with_shell("ncmpcpp toggle") end),
+  awful.button({ }, 3, function () couth.notifier:notify( couth.alsa:setVolume('Master','toggle')) end),
+  awful.button({ }, 4, function () couth.notifier:notify( couth.alsa:setVolume('PCM','2dB+')) end),
+  awful.button({ }, 5, function () couth.notifier:notify( couth.alsa:setVolume('PCM','2dB-')) end),
+  awful.button({ }, 4, function () couth.notifier:notify( couth.alsa:setVolume('Master','2dB+')) end),
+  awful.button({ }, 5, function () couth.notifier:notify( couth.alsa:setVolume('Master','2dB-')) end)))
+
+--{{---| Battery widget |---------------------------------------------------------------------------  
+
+baticon = widget ({type = "imagebox" })
+baticon.image = image(beautiful.widget_battery)
+batwidget = widget({ type = "textbox" })
+vicious.register( batwidget, vicious.widgets.bat, "$1 $2% ", 1, "BAT0" )
+
+--{{---| Separators widgets |-----------------------------------------------------------------------
+
+spr = widget({ type = "textbox" })
+spr.text = ' '
+sprd = widget({ type = "textbox" })
+sprd.text = '<span background="#313131" font="Terminus 12"> </span>'
+sprdots = widget({ type = "textbox" })
+sprdots.text = '⁝'
+arrl = widget ({type = "imagebox" })
+arrl.image = image(beautiful.arrl)
+arrl_dl = widget ({type = "imagebox" })
+arrl_dl.image = image(beautiful.arrl_dl)
+arrl_ld = widget ({type = "imagebox" })
+arrl_ld.image = image(beautiful.arrl_ld)
+arrl_dfl = widget ({type = "imagebox" })
+arrl_dfl.image = image(beautiful.arrl_dfl)
+arrl_lfd = widget ({type = "imagebox" })
+arrl_lfd.image = image(beautiful.arrl_lfd)
+
+-- Create the wibox
+mywibox[s] = awful.wibox({ position = "top",height= "20", screen = s })
+-- Add widgets to the wibox - order matters
+mywibox[s].widgets = {
+    { mylauncher, mytaglist[s], mypromptbox[s], layout = awful.widget.layout.horizontal.leftright
+    },
+    mylayoutbox[s],
+--    arrl_ld,
+--    spr,
+--    arrl_dl, 
+    datewidget,
+--    arrl_ld,
+    memwidget,
+--    arrl_dl, 
+    cpuwidget,
+--    arrl_ld,
+--    neticon,
+--    netwidget,
+--    arrl_dl, 
+--    batwidget,
+--    baticon,
+--    music,
+    s == 1 and mysystray or nil,
+    mytasklist[s],
+    layout = awful.widget.layout.horizontal.rightleft
+}
 end
 -- }}}
 
