@@ -205,12 +205,17 @@ music:buttons(awful.util.table.join(
   awful.button({ }, 4, function () couth.notifier:notify( couth.alsa:setVolume('Master','2dB+')) end),
   awful.button({ }, 5, function () couth.notifier:notify( couth.alsa:setVolume('Master','2dB-')) end)))
 
---{{---| Battery widget |---------------------------------------------------------------------------  
+--{{---| Volume widget |----------------------------------------------------------------------
+
+volumewidget = widget ({type = "imagebox" })
+volumewidget.image = image(beautiful.widget_volume)
+
+--{{---| Battery widget |----------------------------------------------------------------------
 
 baticon = widget ({type = "imagebox" })
-baticon.image = image(beautiful.widget_battery)
+baticon.image = image(config_dir.."/icons/battery.png")
 batwidget = widget({ type = "textbox" })
-vicious.register( batwidget, vicious.widgets.bat, "$1 $2% ", 1, "BAT0" )
+vicious.register( batwidget, vicious.widgets.bat, " $2% ", 10, "BAT0" )
 
 --{{---| Separators widgets |-----------------------------------------------------------------------
 
@@ -223,9 +228,9 @@ sprdots.text = '⁝'
 arrl = widget ({type = "imagebox" })
 arrl.image = image(beautiful.arrl)
 arrl_dl = widget ({type = "imagebox" })
-arrl_dl.image = image(beautiful.arrl_dl)
+arrl_dl.image = image(config_dir.."/icons/arrl_dl.png")
 arrl_ld = widget ({type = "imagebox" })
-arrl_ld.image = image(beautiful.arrl_ld)
+arrl_ld.image = image(config_dir.."/icons/arrl_ld.png")
 arrl_dfl = widget ({type = "imagebox" })
 arrl_dfl.image = image(beautiful.arrl_dfl)
 arrl_lfd = widget ({type = "imagebox" })
@@ -250,9 +255,8 @@ mywibox[s].widgets = {
 --    neticon,
 --    netwidget,
 --    arrl_dl, 
---    batwidget,
---    baticon,
---    music,
+    batwidget,
+    baticon,
     s == 1 and mysystray or nil,
     mytasklist[s],
     layout = awful.widget.layout.horizontal.rightleft
