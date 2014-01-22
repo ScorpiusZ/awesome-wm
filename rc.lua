@@ -1,14 +1,9 @@
--- Standard awesome library
 require("awful")
 require("awful.autofocus")
 require("awful.rules")
--- Theme handling library
 require("beautiful")
--- Notification library
 require("naughty")
---volume
 require("volume")
---Vicious
 require("vicious")
 
 -- Load Debian menu entries
@@ -23,13 +18,6 @@ if awesome.startup_errors then
                      text = awesome.startup_errors })
 end
 
---key of volume
---awful.key({ }, "XF86AudioRaiseVolume", function ()
---    awful.util.spawn("amixer set Master 4%+") end),
---awful.key({ }, "XF86AudioLowerVolume", function ()
---    awful.util.spawn("amixer set Master 4%-") end),
---awful.key({ }, "XF86AudioMute", function ()
---    awful.util.spawn("amixer sset Master toggle") end),
 
 -- Handle runtime errors after startup
 do
@@ -47,21 +35,21 @@ do
 end
 -- }}}
 
--- {{{ Variable definitions
--- Themes define colours, icons, and wallpapers
---beautiful.init("/usr/share/awesome/themes/default/theme.lua")
-beautiful.init(awful.util.getdir("config") .. "/themes/default/theme.lua")
--- This is used later as the default terminal and editor to run.
-terminal = "gnome-terminal "
-editor = os.getenv("EDITOR") or "editor"
-editor_cmd = terminal .. " -e " .. editor
+--{{---| Theme |----------------------------------------------------------------------
+config_dir = ("/home/scorpius/.config/awesome/")
+themes_dir = (config_dir .. "/themes")
+beautiful.init(themes_dir .. "/default/theme.lua")
 
--- Default modkey.
--- Usually, Mod4 is the key with a logo between Control and Alt.
--- If you do not like this or do not have such a key,
--- I suggest you to remap Mod4 to another key using xmodmap or other tools.
--- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
+--{{---| Variables |----------------------------------------------------------------------
+modkey        = "Mod4"
+terminal = "gnome-terminal "
+editor = os.getenv("EDITOR") or "vim"
+editor_cmd = terminal .. " -e " .. editor
+browser       = "firefox"
+
+--{{---| Couth Alsa volume applet |-----------------------------------------------------------------
+
+--couth.CONFIG.ALSA_CONTROLS = { 'Master', 'PCM' }
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
@@ -73,6 +61,16 @@ layouts =
 }
 -- }}}
 
+--{{---| Naughty theme |----------------------------------------------------------------------
+
+naughty.config.default_preset.font         = beautiful.notify_font
+naughty.config.default_preset.fg           = beautiful.notify_fg
+naughty.config.default_preset.bg           = beautiful.notify_bg
+naughty.config.presets.normal.border_color = beautiful.notify_border
+naughty.config.presets.normal.opacity      = 0.8
+naughty.config.presets.low.opacity         = 0.8
+naughty.config.presets.critical.opacity    = 0.8
+
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
@@ -80,15 +78,14 @@ for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag({ "Scorpius1","Gemini2","Cancer3","Pisces4","Capricorn5","Libra6"}, s, layouts[1])
 end
--- }}}
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
+    {"edit config",           "terminal -x vim /home/scorpius/.config/awesome/rc.lua"},
+    { "restart", awesome.restart },
+    {"reboot",                "sudo reboot"},
+    { "quit", "gnome-session-quit" }
 }
 
 mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesome_icon },
