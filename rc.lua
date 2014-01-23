@@ -171,7 +171,7 @@ for s = 1, screen.count() do
 -- Time widget
 datewidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, '<span color="#FFD700" font="Terminus 8"> %m-%d  %a  %T</span>', 1)
+vicious.register(datewidget, vicious.widgets.date, '<span color="#FFD700" font="Terminus 8"> %m-%d  %a  %T </span>', 1)
 
 -- Mem widget
 memwidget = widget({ type = "textbox" })
