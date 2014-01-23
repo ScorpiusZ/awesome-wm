@@ -171,15 +171,15 @@ for s = 1, screen.count() do
 -- Time widget
 datewidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, "%F  %a  %T ", 1)
+vicious.register(datewidget, vicious.widgets.date, '<span color="#FFD700" font="Terminus 8"> %m-%d  %a  %T</span>', 1)
 
 -- Mem widget
 memwidget = widget({ type = "textbox" })
-vicious.register(memwidget, vicious.widgets.mem, "Mem :$1% ", 10)
+vicious.register(memwidget, vicious.widgets.mem, 'Mem :<span color="#46A8C3" font="Terminus 8"> $1% </span> ', 10)
 
 -- Cpu widget
 cpuwidget = widget({ type = "textbox" })
-vicious.register(cpuwidget, vicious.widgets.cpu, "  Cpu : $1%   ")
+vicious.register(cpuwidget, vicious.widgets.cpu, '  Cpu :<span color="#7AC82E" font="Terminus 8"> $1% </span>  ')
 
 -- Net widget 
 netwidget = widget({ type = "textbox" })
@@ -214,7 +214,7 @@ volumewidget.image = image(beautiful.widget_volume)
 baticon = widget ({type = "imagebox" })
 baticon.image = image(config_dir.."/icons/battery.png")
 batwidget = widget({ type = "textbox" })
-vicious.register( batwidget, vicious.widgets.bat, " $2% ", 10, "BAT0" )
+vicious.register( batwidget, vicious.widgets.bat, ' <span color="#CD69C9" font="Terminus 8"> $2% </span>', 10, "BAT0" )
 
 --{{---| Separators widgets |-----------------------------------------------------------------------
 
@@ -463,7 +463,7 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 _awesome_quit = awesome.quit
 awesome.quit = function()
     if os.getenv("DESKTOP_SESSION") ==
-        "awesome" then
+        "awesome-gnome" then
         os.execute("/usr/bin/gnome-session-quit")
     else
         _awesome_quit()
