@@ -185,9 +185,9 @@ vicious.register(cpuwidget, vicious.widgets.cpu, '  Cpu :<span color="#7AC82E" f
 netwidget = widget({ type = "textbox" })
 vicious.register(netwidget, 
 vicious.widgets.net,
-'<span background="#313131" font="Terminus 12"> <span font="Terminus 9" color="#7AC82E">${eth0 down_kb}</span> <span font="Terminus 9" color="#46A8C3">${eth0 up_kb}</span> </span>', 3)
+' Down : <span font="Terminus 8" color="#7AC82E">${eth1 down_kb}</span>/KB  Up : <span font="Terminus 8" color="#46A8C3">${eth1 up_kb}</span>/KB ', 1)
 neticon = widget ({type = "imagebox" })
-neticon.image = image(beautiful.widget_net)
+neticon.image = image(config_dir.."/icons/net.png")
 netwidget:buttons(awful.util.table.join(awful.button({ }, 1,
 function () awful.util.spawn_with_shell(iptraf) end)))
 
@@ -242,18 +242,10 @@ mywibox[s].widgets = {
     { mylauncher, mytaglist[s], mypromptbox[s], layout = awful.widget.layout.horizontal.leftright
     },
     mylayoutbox[s],
---    arrl_ld,
---    spr,
---    arrl_dl, 
     datewidget,
---    arrl_ld,
     memwidget,
---    arrl_dl, 
     cpuwidget,
---    arrl_ld,
---    neticon,
---    netwidget,
---    arrl_dl, 
+    netwidget,
     batwidget,
     baticon,
     s == 1 and mysystray or nil,
