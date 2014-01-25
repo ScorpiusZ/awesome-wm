@@ -75,7 +75,7 @@ naughty.config.presets.critical.opacity    = 0.8
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ "Scorpius1","Gemini2","Cancer3","Pisces4","Capricorn5","Libra6"}, s, layouts[1])
+    tags[s] = awful.tag({ 'Scorpius','Gemini','Cancer','Pisces','Capricorn','Libra'}, s, layouts[1])
 end
 
 -- {{{ Menu
