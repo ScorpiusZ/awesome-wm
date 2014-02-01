@@ -266,7 +266,7 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ }, "Print", function ()
-        awful.util.spawn("gnome-screenshot") end),
+        awful.util.spawn("gnome-screenshot -c") end),
     awful.key({ }, "XF86AudioRaiseVolume", function ()
         awful.util.spawn("amixer set Master 4%+") end),
     awful.key({ }, "XF86AudioLowerVolume", function ()
