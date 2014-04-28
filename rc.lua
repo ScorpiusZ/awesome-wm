@@ -185,7 +185,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, '  Cpu :<span color="#7AC82E" f
 netwidget = widget({ type = "textbox" })
 vicious.register(netwidget, 
 vicious.widgets.net,
-' Down : <span font="Terminus 8" color="#7AC82E">${eth1 down_kb}</span>/KB  Up : <span font="Terminus 8" color="#46A8C3">${eth1 up_kb}</span>/KB ', 1)
+' Down : <span font="Terminus 8" color="#7AC82E">${wlan0 down_kb}</span>/KB  Up : <span font="Terminus 8" color="#46A8C3">${wlan0 up_kb}</span>/KB ', 1)
 neticon = widget ({type = "imagebox" })
 neticon.image = image(config_dir.."/icons/net.png")
 netwidget:buttons(awful.util.table.join(awful.button({ }, 1,
